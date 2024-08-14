@@ -3,9 +3,11 @@
   "module": "src/index.ts",
   "type": "module",
   "scripts": {
-    "serve": "bun run src/index.ts"
+    "serve": "bun run src/index.ts",
+    "simulate": "bun run src/simulate.ts"
   },
   "devDependencies": {
+    "@octokit/webhooks-types": "^7.5.1",
     "@types/bun": "latest"
   },
   "peerDependencies": {
