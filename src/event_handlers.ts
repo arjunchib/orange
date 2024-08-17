@@ -1,15 +1,18 @@
 import type { PushEvent } from "@octokit/webhooks-types";
 import { $ } from "bun";
 
+interface Config {
+  deploy: string;
+}
+
 export async function handlePushEvent(event: PushEvent) {
   if (event.ref !== "refs/heads/main") return;
   const repo = event.repository.name;
-  if (repo === "peach") {
-    await $`git pull`.cwd(`${Bun.env.HOME}/peach`);
-  } else if (repo === "memebot3") {
-    await $`git pull && bun i && sudo systemctl restart memebot`.cwd(
-      `${Bun.env.HOME}/memebot3`
-    );
+  const dir = `${Bun.env.HOME}/${repo}`;
+  await $`git pull`.cwd(dir);
+  const config = await getConfig(dir);
+  if (config) {
+    await $`${{ raw: config.deploy }}`.cwd(dir);
   }
   await fetch(`${Bun.env.DISCORD_WEBHOOK!}?wait=true`, {
     method: "POST",
@@ -20,4 +23,12 @@ export async function handlePushEvent(event: PushEvent) {
       content: `Deployed ${event.head_commit?.id} for ${repo}`,
     }),
   });
+}
+
+async function getConfig(dir: string) {
+  try {
+    return (await import(`${dir}/orange.toml`)) as Config;
+  } catch {
+    return undefined;
+  }
 }
