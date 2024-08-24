@@ -1,5 +1,4 @@
 import { verifySignature } from "./validate";
-import { $ } from "bun";
 import type { WebhookEventName } from "@octokit/webhooks-types";
 import { handlePushEvent } from "./event_handlers";
 

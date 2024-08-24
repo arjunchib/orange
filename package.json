@@ -2,6 +2,9 @@
   "name": "orange",
   "module": "src/index.ts",
   "type": "module",
+  "exports": {
+    "./error": "./src/error.ts"
+  },
   "scripts": {
     "serve": "bun run src/index.ts",
     "simulate": "bun run src/simulate.ts"
