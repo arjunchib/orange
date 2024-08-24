@@ -53,7 +53,7 @@ function createEmbed(event: PushEvent, success: boolean) {
       : `Depoloying ${event.repository.name}`,
     description: event.commits.map((c) => `- ${c.message}`).join("\n"),
     footer,
-    color: success ? 0x13c10a : 0xffd600,
+    color: success ? 0x4bae4f : 0xffe547,
     timestamp: event.head_commit?.timestamp,
     url: event.compare,
   };
