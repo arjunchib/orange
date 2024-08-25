@@ -13,6 +13,7 @@ export async function handlePushEvent(event: PushEvent) {
   const dir = `${Bun.env.HOME}/${repo}`;
 
   const webhookResponse = await executeWebhook(
+    Bun.env.DEPLOY_WEBHOOK!,
     {
       embeds: [createEmbed(event, false)],
     },

@@ -3,10 +3,10 @@
   "module": "src/index.ts",
   "type": "module",
   "exports": {
-    "./error": "./src/error.ts"
+    ".": "./src/index.ts"
   },
   "scripts": {
-    "serve": "bun run src/index.ts",
+    "serve": "bun run src/serve.ts",
     "simulate": "bun run src/simulate.ts"
   },
   "devDependencies": {

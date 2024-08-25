@@ -1,7 +1,8 @@
 import type { Embed, WebhookResponse } from "./types";
 
 interface ExecuteWebhookParmas {
-  embeds: Embed[];
+  content?: string;
+  embeds?: Embed[];
 }
 
 interface ExecuteWebhookOptions {
@@ -9,14 +10,16 @@ interface ExecuteWebhookOptions {
 }
 
 export async function executeWebhook(
+  url: URL | string,
   payload: ExecuteWebhookParmas,
   options?: ExecuteWebhookOptions
 ) {
-  const url = new URL(Bun.env.DISCORD_WEBHOOK!);
+  if (typeof url === "string") {
+    url = new URL(url);
+  }
   if (options) {
     url.search = "?" + new URLSearchParams(options as any).toString();
   }
-  console.log(url);
   const res = await fetch(url, {
     method: "POST",
     headers: {
