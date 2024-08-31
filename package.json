@@ -6,8 +6,12 @@
     ".": "./src/index.ts"
   },
   "scripts": {
+    "start": "bun --hot src/serve.ts",
     "serve": "bun run src/serve.ts",
     "simulate": "bun run src/simulate.ts"
+  },
+  "dependencies": {
+    "peach": "link:peach"
   },
   "devDependencies": {
     "@octokit/webhooks-types": "^7.5.1",
