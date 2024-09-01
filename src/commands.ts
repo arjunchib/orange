@@ -17,9 +17,15 @@ export const deleteEnv = subcommand(
   string("name", "name of variable").required(),
 ]);
 
+export const getEnv = subcommand(
+  "get",
+  "read all environment variables"
+).options([string("project", "name of project").required().choices(projects)]);
+
 export const env = slashCommand("env", "update environment variables").options([
   setEnv,
   deleteEnv,
+  getEnv,
 ]);
 
 export const commands = { env };

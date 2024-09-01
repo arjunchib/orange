@@ -1,5 +1,5 @@
 import type { $slash } from "peach";
-import type { deleteEnv, setEnv } from "../commands";
+import type { deleteEnv, getEnv, setEnv } from "../commands";
 import { readText } from "../util";
 
 export class EnvController {
@@ -25,8 +25,21 @@ export class EnvController {
     });
   }
 
+  async get(interaction: $slash<typeof getEnv>) {
+    const { project } = interaction.options();
+    const env = await this.getValuesRaw(project);
+    await interaction.respondWith({
+      content: `\`\`\`${env}\`\`\``,
+      flags: 1 << 6,
+    });
+  }
+
+  private async getValuesRaw(project: string) {
+    return await readText(this.envPath(project));
+  }
+
   private async getValues(project: string) {
-    const text = await readText(this.envPath(project));
+    const text = await this.getValuesRaw(project);
     if (!text) return {};
     return Object.fromEntries(
       text
