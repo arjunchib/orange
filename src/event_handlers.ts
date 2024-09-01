@@ -51,7 +51,7 @@ function createEmbed(event: PushEvent, success: boolean) {
     },
     title: success
       ? `Deployed ${event.repository.name}`
-      : `Depoloying ${event.repository.name}`,
+      : `Deploying ${event.repository.name}`,
     description: event.commits.map((c) => `- ${c.message}`).join("\n"),
     footer,
     color: success ? 0x4bae4f : 0xffe547,
