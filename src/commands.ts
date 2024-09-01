@@ -5,7 +5,7 @@ const projects = readdirSync("../").filter((dir) => !dir.startsWith("."));
 
 export const setEnv = subcommand("set", "set environment variable").options([
   string("project", "name of project").required().choices(projects),
-  string("name", "name of variable").required(),
+  string("name", "name of variable").required().autocomplete(),
   string("value", "value to set").required(),
 ]);
 
@@ -14,7 +14,7 @@ export const deleteEnv = subcommand(
   "remove environment variable"
 ).options([
   string("project", "name of project").required().choices(projects),
-  string("name", "name of variable").required(),
+  string("name", "name of variable").required().autocomplete(),
 ]);
 
 export const getEnv = subcommand(

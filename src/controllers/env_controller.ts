@@ -1,4 +1,4 @@
-import type { $slash } from "peach";
+import type { $focus, $slash } from "peach";
 import type { deleteEnv, getEnv, setEnv } from "../commands";
 import { readText, splitOnce } from "../util";
 import { constantCase } from "change-case";
@@ -30,6 +30,18 @@ export class EnvController {
     const env = await this.getValues();
     console.log("env", env);
     await interaction.respondWith(this.response(env));
+  }
+
+  async autocompleteName(interaction: $focus<string>) {
+    const { project } = interaction.options();
+    const name = interaction.focus();
+    this.project = project;
+    const env = await this.getValues();
+    interaction.respondWith;
+    const choices = Object.keys(env)
+      .filter((k) => k.startsWith(constantCase(name)))
+      .map((k) => ({ name: k, value: k }));
+    await interaction.respondWith(choices);
   }
 
   private response(env: Record<string, string>) {
