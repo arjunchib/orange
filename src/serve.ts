@@ -6,6 +6,7 @@ import { commands } from "./commands";
 import { routes } from "./routes";
 import { editWebhook } from "./discord/edit_webhook";
 import { unlink } from "fs/promises";
+import { readJSON } from "./util";
 
 const usePeach = await bootstrapWebhook({
   applicationId: Bun.env.APPLICATION_ID!,
@@ -31,15 +32,6 @@ Bun.serve({
 });
 
 await sendOnStart();
-
-async function readJSON(path: string) {
-  try {
-    const file = Bun.file(path);
-    return await file.json();
-  } catch {
-    return undefined;
-  }
-}
 
 async function sendOnStart() {
   const json = await readJSON(".tmp_state");

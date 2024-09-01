@@ -12,7 +12,10 @@ export const setEnv = subcommand("set", "set environment variable").options([
 export const deleteEnv = subcommand(
   "delete",
   "remove environment variable"
-).options([string("name", "name of variable").required()]);
+).options([
+  string("project", "name of project").required().choices(projects),
+  string("name", "name of variable").required(),
+]);
 
 export const env = slashCommand("env", "update environment variables").options([
   setEnv,
