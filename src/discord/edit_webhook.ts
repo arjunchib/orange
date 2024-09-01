@@ -8,7 +8,7 @@ export async function editWebhook(
   messageId: string,
   payload: ExecuteWebhookParmas
 ) {
-  const url = new URL(`${Bun.env.DISCORD_WEBHOOK!}/messages/${messageId}`);
+  const url = new URL(`${Bun.env.DEPLOY_WEBHOOK!}/messages/${messageId}`);
   const res = await fetch(url, {
     method: "PATCH",
     headers: {

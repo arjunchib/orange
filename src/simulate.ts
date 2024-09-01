@@ -18,4 +18,8 @@ await handlePushEvent({
   repository: {
     name: repo,
   },
+  sender: {
+    login: "arjunchib",
+  },
+  commits: [{ message: "Test CI" }],
 } as PushEvent);
