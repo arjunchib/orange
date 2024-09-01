@@ -178,3 +178,4 @@ git-example.txt
 .peach
 .env
 .env copy
+.tmp_state

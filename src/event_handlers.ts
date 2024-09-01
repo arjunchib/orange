@@ -2,6 +2,7 @@ import type { PushEvent } from "@octokit/webhooks-types";
 import { $ } from "bun";
 import { executeWebhook } from "./discord/execute_webhook";
 import { editWebhook } from "./discord/edit_webhook";
+import { unlink } from "fs/promises";
 
 interface Config {
   deploy: string;
@@ -15,14 +16,14 @@ export async function handlePushEvent(event: PushEvent) {
   const webhookResponse = await executeWebhook(
     Bun.env.DEPLOY_WEBHOOK!,
     {
-      embeds: [createEmbed(event, false)],
+      embeds: [createEmbed(event, "pending")],
     },
     { wait: true }
   );
 
   await $`git pull`.cwd(dir);
   const config = await getConfig(dir);
-  const embeds = [createEmbed(event, true)];
+  const embeds = [createEmbed(event, "success")];
 
   if (repo === "orange") {
     Bun.write(
@@ -42,21 +43,42 @@ export async function handlePushEvent(event: PushEvent) {
 
   if (config) {
     console.log(`Deploying ${repo}: ${config.deploy}`);
-    await $`${{ raw: config.deploy }}`.cwd(dir);
+    try {
+      await $`${{ raw: config.deploy }}`.cwd(dir);
+      await editWebhook(webhookResponse.id, { embeds });
+    } catch (e) {
+      console.error(e);
+      await editWebhook(webhookResponse.id, {
+        embeds: [createEmbed(event, "failure")],
+      });
+      try {
+        await unlink(".tmp_state");
+      } catch {}
+    }
   }
-
-  await editWebhook(webhookResponse.id, { embeds });
 }
 
 async function getConfig(dir: string) {
   try {
-    return (await import(`${dir}/orange.toml`)) as Config;
+    const file = Bun.file(`${dir}/orange.toml`);
+    return Bun.TOML.parse(await file.text()) as Config;
   } catch {
     return undefined;
   }
 }
 
-function createEmbed(event: PushEvent, success: boolean) {
+function createEmbed(
+  event: PushEvent,
+  state: "pending" | "success" | "failure"
+) {
+  const title =
+    state === "pending"
+      ? `Deploying ${event.repository.name}`
+      : state === "success"
+      ? `Deployed ${event.repository.name}`
+      : `Error deploying ${event.repository.name}`;
+  const color =
+    state === "pending" ? 0xffe547 : state === "success" ? 0x4bae4f : 0xcd3621;
   const footer = event.head_commit
     ? {
         text: event.head_commit?.id,
@@ -68,12 +90,10 @@ function createEmbed(event: PushEvent, success: boolean) {
       icon_url: event.sender.avatar_url,
       url: event.sender.html_url,
     },
-    title: success
-      ? `Deployed ${event.repository.name}`
-      : `Deploying ${event.repository.name}`,
+    title,
     description: event.commits.map((c) => `- ${c.message}`).join("\n"),
     footer,
-    color: success ? 0x4bae4f : 0xffe547,
+    color,
     timestamp: event.head_commit?.timestamp,
     url: event.compare,
   };
