@@ -41,6 +41,7 @@ export async function handlePushEvent(event: PushEvent) {
   }
 
   if (config) {
+    console.log(`Deploying ${repo}: ${config.deploy}`);
     await $`${{ raw: config.deploy }}`.cwd(dir);
   }
 
