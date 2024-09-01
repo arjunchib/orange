@@ -11,6 +11,7 @@
     "simulate": "bun run src/simulate.ts"
   },
   "dependencies": {
+    "change-case": "^5.4.4",
     "peach": "link:peach"
   },
   "devDependencies": {

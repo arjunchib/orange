@@ -1,6 +1,7 @@
 import type { $slash } from "peach";
 import type { deleteEnv, getEnv, setEnv } from "../commands";
 import { readText, splitOnce } from "../util";
+import { constantCase } from "change-case";
 
 export class EnvController {
   private project?: string;
@@ -9,7 +10,7 @@ export class EnvController {
     const { project, name, value } = interaction.options();
     this.project = project;
     const env = await this.getValues();
-    env[name] = value;
+    env[constantCase(name)] = value;
     await this.saveValues(env);
     await interaction.respondWith(this.response(env));
   }
