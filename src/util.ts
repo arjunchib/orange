@@ -15,3 +15,8 @@ export async function readText(path: string) {
     return undefined;
   }
 }
+
+export function splitOnce(value: string, seperator: string) {
+  const i = value.indexOf(seperator);
+  return [value.slice(0, i), value.slice(i + 1)];
+}
