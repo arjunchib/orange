@@ -22,11 +22,29 @@ export async function handlePushEvent(event: PushEvent) {
 
   await $`git pull`.cwd(dir);
   const config = await getConfig(dir);
+  const embeds = [createEmbed(event, true)];
+
+  if (repo === "orange") {
+    Bun.write(
+      ".tmp_state",
+      JSON.stringify(
+        {
+          sendOnStart: {
+            webhookId: webhookResponse.id,
+            payload: { embeds },
+          },
+        },
+        null,
+        2
+      )
+    );
+  }
+
   if (config) {
     await $`${{ raw: config.deploy }}`.cwd(dir);
   }
 
-  await editWebhook(webhookResponse.id, { embeds: [createEmbed(event, true)] });
+  await editWebhook(webhookResponse.id, { embeds });
 }
 
 async function getConfig(dir: string) {

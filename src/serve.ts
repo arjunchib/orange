@@ -4,6 +4,8 @@ import { handlePushEvent } from "./event_handlers";
 import { bootstrapWebhook } from "peach";
 import { commands } from "./commands";
 import { routes } from "./routes";
+import { editWebhook } from "./discord/edit_webhook";
+import { unlink } from "fs/promises";
 
 const usePeach = await bootstrapWebhook({
   applicationId: Bun.env.APPLICATION_ID!,
@@ -27,6 +29,16 @@ Bun.serve({
     }
   },
 });
+
+await sendOnStart();
+
+async function sendOnStart() {
+  const file = Bun.file(".tmp_state");
+  const contents = await file.json();
+  const { webhookId, payload } = contents["sendOnStart"];
+  await editWebhook(webhookId, payload);
+  await unlink(".tmp_state");
+}
 
 async function useGithub(req: Request) {
   const signature = req.headers.get("X-Hub-Signature-256");
