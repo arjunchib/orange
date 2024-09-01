@@ -32,19 +32,19 @@ Bun.serve({
 
 await sendOnStart();
 
-function openFile(path: string) {
+async function readJSON(path: string) {
   try {
-    return Bun.file(path);
+    const file = Bun.file(path);
+    return await file.json();
   } catch {
     return undefined;
   }
 }
 
 async function sendOnStart() {
-  const file = openFile(".tmp_state");
-  if (file) {
-    const contents = await file.json();
-    const { webhookId, payload } = contents["sendOnStart"];
+  const json = await readJSON(".tmp_state");
+  if (json) {
+    const { webhookId, payload } = json["sendOnStart"];
     await editWebhook(webhookId, payload);
     await unlink(".tmp_state");
   }
