@@ -32,12 +32,22 @@ Bun.serve({
 
 await sendOnStart();
 
+function openFile(path: string) {
+  try {
+    return Bun.file(path);
+  } catch {
+    return undefined;
+  }
+}
+
 async function sendOnStart() {
-  const file = Bun.file(".tmp_state");
-  const contents = await file.json();
-  const { webhookId, payload } = contents["sendOnStart"];
-  await editWebhook(webhookId, payload);
-  await unlink(".tmp_state");
+  const file = openFile(".tmp_state");
+  if (file) {
+    const contents = await file.json();
+    const { webhookId, payload } = contents["sendOnStart"];
+    await editWebhook(webhookId, payload);
+    await unlink(".tmp_state");
+  }
 }
 
 async function useGithub(req: Request) {
