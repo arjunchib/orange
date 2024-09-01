@@ -28,7 +28,6 @@ export class EnvController {
     const { project } = interaction.options();
     this.project = project;
     const env = await this.getValues();
-    console.log("env", env);
     await interaction.respondWith(this.response(env));
   }
 
@@ -48,7 +47,6 @@ export class EnvController {
     const text = Object.entries(env)
       .map(([k, v]) => `${k}="${v}"`)
       .join("\n");
-    console.log(text);
     return {
       content: `\`\`\`sh\n${text}\n\`\`\``,
       flags: 1 << 6,

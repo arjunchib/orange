@@ -11,7 +11,7 @@ const { values, positionals } = parseArgs({
 
 const [, , repo] = positionals;
 
-console.log(`Simualating push event for ${repo}`);
+console.log(`Simulating push event for ${repo}`);
 
 await handlePushEvent({
   ref: "refs/heads/main",
