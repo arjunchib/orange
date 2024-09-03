@@ -40,6 +40,7 @@ async function sendOnStart() {
     const { webhookId, payload } = sendOnStart;
     await editWebhook(webhookId, payload);
   }
+  KV.delete("sendOnStart");
 }
 
 async function useGithub(req: Request) {
