@@ -1,6 +1,6 @@
 import type { $focus, $slash } from "peach";
 import type { deleteEnv, getEnv, setEnv } from "../commands";
-import { readText, splitOnce } from "../util";
+import { readText, splitOnce } from "../../util";
 import { constantCase } from "change-case";
 
 export class EnvController {

@@ -2,11 +2,12 @@ import { verifySignature } from "./validate";
 import type { WebhookEventName } from "@octokit/webhooks-types";
 import { handlePushEvent } from "./event_handlers";
 import { bootstrapWebhook } from "peach";
-import { commands } from "./discord/commands";
-import { routes } from "./discord/routes";
-import { editWebhook } from "./discord/edit_webhook";
+import { commands } from "../discord/commands";
+import { routes } from "../discord/routes";
+import { editWebhook } from "../discord/edit_webhook";
 import { unlink } from "fs/promises";
-import { readJSON } from "./util";
+import { readJSON } from "../util";
+import { KV } from "../kv";
 
 const usePeach = await bootstrapWebhook({
   applicationId: Bun.env.APPLICATION_ID!,
@@ -34,11 +35,10 @@ Bun.serve({
 await sendOnStart();
 
 async function sendOnStart() {
-  const json = await readJSON(".tmp_state");
-  if (json) {
-    const { webhookId, payload } = json["sendOnStart"];
+  const sendOnStart = KV.get("sendOnStart")?.parsedValue;
+  if (sendOnStart) {
+    const { webhookId, payload } = sendOnStart;
     await editWebhook(webhookId, payload);
-    await unlink(".tmp_state");
   }
 }
 

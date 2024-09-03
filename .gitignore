@@ -179,3 +179,7 @@ git-example.txt
 .env
 .env copy
 .tmp_state
+
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal

@@ -1,6 +1,7 @@
 import type { PushEvent } from "@octokit/webhooks-types";
 import { handlePushEvent } from "./event_handlers";
 import { parseArgs } from "util";
+import { KV } from "../kv";
 
 const { values, positionals } = parseArgs({
   args: Bun.argv,

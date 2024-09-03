@@ -1,8 +1,9 @@
 import type { PushEvent } from "@octokit/webhooks-types";
 import { $ } from "bun";
-import { executeWebhook } from "./discord/execute_webhook";
-import { editWebhook } from "./discord/edit_webhook";
+import { executeWebhook } from "../discord/execute_webhook";
+import { editWebhook } from "../discord/edit_webhook";
 import { unlink } from "fs/promises";
+import { KV } from "../kv";
 
 interface Config {
   deploy: string;
@@ -26,19 +27,10 @@ export async function handlePushEvent(event: PushEvent) {
   const embeds = [createEmbed(event, "success")];
 
   if (repo === "orange") {
-    Bun.write(
-      ".tmp_state",
-      JSON.stringify(
-        {
-          sendOnStart: {
-            webhookId: webhookResponse.id,
-            payload: { embeds },
-          },
-        },
-        null,
-        2
-      )
-    );
+    KV.set("sendOnStart", {
+      webhookId: webhookResponse.id,
+      payload: { embeds },
+    });
   }
 
   if (config) {
