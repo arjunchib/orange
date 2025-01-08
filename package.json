@@ -2,23 +2,27 @@
   "name": "orange",
   "module": "src/index.ts",
   "type": "module",
+  "bin": "./cli.ts",
   "exports": {
     ".": "./src/index.ts"
   },
   "scripts": {
-    "start": "bun --hot src/webhooks/serve.ts",
-    "serve": "bun run src/webhooks/serve.ts",
-    "simulate": "bun run src/webhooks/simulate.ts"
+    "start": "bun --hot src/main.ts",
+    "serve": "bun run src/main.ts"
   },
   "dependencies": {
+    "better-sqlite3": "^11.6.0",
     "change-case": "^5.4.4",
+    "drizzle-orm": "^0.36.4",
+    "octokit": "^4.0.2",
     "peach": "link:peach"
   },
   "devDependencies": {
-    "@octokit/webhooks-types": "^7.5.1",
-    "@types/bun": "^1.1.8"
+    "@octokit/webhooks-types": "^7.6.1",
+    "@types/bun": "^1.1.14",
+    "drizzle-kit": "^0.28.1"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.7.2"
   }
 }

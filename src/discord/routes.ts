@@ -1,6 +1,7 @@
 import { Route, autocompleteRoute, commandRoute } from "peach";
-import { deleteEnv, getEnv, setEnv } from "./commands";
+import { add_project, deleteEnv, getEnv, setEnv } from "./commands";
 import { EnvController } from "./controllers/env_controller";
+import { ProjectController } from "./controllers/project_controller";
 
 export const routes: Route[] = [
   commandRoute(setEnv).to(EnvController, "set"),
@@ -11,4 +12,9 @@ export const routes: Route[] = [
   autocompleteRoute(deleteEnv)
     .focus("name")
     .to(EnvController, "autocompleteName"),
+
+  commandRoute(add_project).to(ProjectController, "add"),
+  autocompleteRoute(add_project)
+    .focus("name")
+    .to(ProjectController, "autocompleteName"),
 ];

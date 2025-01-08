@@ -3,7 +3,6 @@ import { $ } from "bun";
 import { executeWebhook } from "../discord/execute_webhook";
 import { editWebhook } from "../discord/edit_webhook";
 import { unlink } from "fs/promises";
-import { KV } from "../kv";
 
 interface Config {
   deploy: string;

@@ -1,1 +1,0 @@
-deploy = "bun i --production && sudo systemctl restart orange"

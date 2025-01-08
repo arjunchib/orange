@@ -28,4 +28,12 @@ export const env = slashCommand("env", "update environment variables").options([
   getEnv,
 ]);
 
-export const commands = { env };
+export const add_project = subcommand("add", "add a project").options([
+  string("name", "name of repo").required(),
+]);
+
+export const project = slashCommand("project", "modify projects").options([
+  add_project,
+]);
+
+export const commands = { env, project };
