@@ -183,3 +183,4 @@ git-example.txt
 *.sqlite
 *.sqlite-shm
 *.sqlite-wal
+orange.db
