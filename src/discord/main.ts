@@ -11,5 +11,5 @@ export const usePeach = await bootstrapWebhook({
   commands,
   routes,
   token: Bun.env.DISCORD_BOT_TOKEN!,
-  debug: true,
+  // debug: true,
 });

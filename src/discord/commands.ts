@@ -29,7 +29,7 @@ export const env = slashCommand("env", "update environment variables").options([
 ]);
 
 export const add_project = subcommand("add", "add a project").options([
-  string("name", "name of repo").required(),
+  string("name", "name of repo").required().autocomplete(),
 ]);
 
 export const project = slashCommand("project", "modify projects").options([
