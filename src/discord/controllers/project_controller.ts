@@ -1,11 +1,14 @@
 import type { $focus, $slash } from "peach";
 import type { add_project } from "../commands";
-import { octokit } from "../../octokit";
 import { $ } from "bun";
 import { db } from "../../db";
 import { projects } from "../../../db/schema";
+import { inject } from "../../util";
+import { GithubService } from "../../services/github_service";
 
 export class ProjectController {
+  private githubService = inject(GithubService);
+
   async add(interaction: $slash<typeof add_project>) {
     const { name } = interaction.options();
     await db.insert(projects).values({ name });
@@ -15,12 +18,7 @@ export class ProjectController {
 
   async autocompleteName(interaction: $focus<string>) {
     const name = interaction.focus();
-    const repos = await octokit.paginate(
-      octokit.rest.repos.listForAuthenticatedUser,
-      {
-        per_page: 100,
-      }
-    );
+    const repos = (await this.githubService.repos()).filter((r) => !r.archived);
     const choices = repos
       .filter((repo) => repo.name.startsWith(name))
       .slice(0, 25)

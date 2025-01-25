@@ -32,8 +32,11 @@ export const add_project = subcommand("add", "add a project").options([
   string("name", "name of repo").required().autocomplete(),
 ]);
 
+export const list_project = subcommand("list", "list all projects");
+
 export const project = slashCommand("project", "modify projects").options([
   add_project,
+  list_project,
 ]);
 
 export const commands = { env, project };
